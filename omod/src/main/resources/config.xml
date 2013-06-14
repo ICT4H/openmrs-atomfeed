@@ -18,8 +18,12 @@
 	
 	<!-- Module Activator -->
 	<activator>${project.parent.groupId}.${project.parent.artifactId}.AtomFeedActivator</activator>
-	
-	
+
+
+    <advice>
+        <point>org.openmrs.api.PatientService</point>
+        <class>org.openmrs.module.atomfeed.advice.PatientAdvice</class>
+    </advice>
 	<!-- Adds link to admin page -->
 	<extension>
 		<point>org.openmrs.admin.list</point>
