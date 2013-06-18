@@ -19,5 +19,9 @@
 
 	<!-- Add here beans related to the API context -->
 
-	
+    <bean id="eventServiceFactory" class="org.openmrs.module.atomfeed.factory.EventServiceFactory"/>
+
+    <bean id="eventService" factory-bean="eventServiceFactory" factory-method="get">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
 </beans>

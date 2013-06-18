@@ -35,6 +35,7 @@
 	<properties>
 		<openMRSVersion>1.9.2</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <atomfeed.version>0.9.1</atomfeed.version>
 	</properties>
 
 	<dependencyManagement>
@@ -50,7 +51,11 @@
 				<scope>compile</scope>
 			</dependency>
 			-->
-			
+            <dependency>
+                <groupId>org.ict4h</groupId>
+                <artifactId>atomfeed-server</artifactId>
+                <version>${atomfeed.version}</version>
+            </dependency>
 			
 
 			<!-- Begin OpenMRS core -->
