@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 	<name>AtomFeed Module</name>
 	<description>Atomfeed publisher and consumer for OpenMRS.</description>
-	<url>https://wiki.openmrs.org/display/docs/AtomFeed+Module+Module</url>
+	<url>https://github.com/ICT4H/openmrs-atomfeed</url>
 	
 	<developers>
 		<developer>
@@ -28,8 +28,8 @@
 	</scm>
 
 	<modules>
-		<module>api</module>
-		<module>omod</module>
+		<module>openmrs-atomfeed-api</module>
+		<module>openmrs-atomfeed-omod</module>
 	</modules>
 	
 	<properties>
@@ -41,25 +41,12 @@
 	<dependencyManagement>
 		<dependencies>
 		
-			<!--
-			Libraries to add as dependencies with compile or runtime scope:
-			Find matching dependencies in the maven central repository.
-			<dependency>
-				<groupId>org.other.library</groupId>
-				<artifactId>library-name</artifactId>
-				<version>library.version</version>
-				<scope>compile</scope>
-			</dependency>
-			-->
             <dependency>
                 <groupId>org.ict4h</groupId>
                 <artifactId>atomfeed-server</artifactId>
                 <version>${atomfeed.version}</version>
             </dependency>
-			
 
-			<!-- Begin OpenMRS core -->
-			
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
 				<artifactId>openmrs-api</artifactId>
@@ -99,8 +86,6 @@
 				<type>pom</type>
 				<scope>test</scope>
 			</dependency>
-						
-			<!-- End OpenMRS core -->
 
 		</dependencies>
 	</dependencyManagement>
