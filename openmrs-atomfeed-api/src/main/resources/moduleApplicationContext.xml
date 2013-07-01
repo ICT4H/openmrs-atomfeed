@@ -19,9 +19,7 @@
 
 	<!-- Add here beans related to the API context -->
 
-    <bean id="eventServiceFactory" class="org.openmrs.module.atomfeed.factory.EventServiceFactory"/>
-
-    <bean id="eventService" factory-bean="eventServiceFactory" factory-method="get">
-        <constructor-arg ref="sessionFactory"/>
+    <bean id="openMRSConnectionProvider" class="org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
 </beans>
