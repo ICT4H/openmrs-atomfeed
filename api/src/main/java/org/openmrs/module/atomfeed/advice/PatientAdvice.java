@@ -5,19 +5,19 @@ import org.ict4h.atomfeed.server.service.EventService;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.module.atomfeed.mapper.EventMapper;
 import org.springframework.aop.AfterReturningAdvice;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
 
 public class PatientAdvice implements AfterReturningAdvice {
-    private final EventService eventService;
-    private final EventMapper eventMapper;
+    private EventService eventService;
+    private EventMapper eventMapper;
 
-    @Autowired
     public PatientAdvice(EventService eventService, EventMapper eventMapper) {
         this.eventService = eventService;
         this.eventMapper = eventMapper;
     }
+
+    public PatientAdvice(){}
 
     @Override
     public void afterReturning(Object returnValue, Method method, Object[] arguments, Object target) throws Throwable {
