@@ -2,6 +2,7 @@ package org.openmrs.module.atomfeed.advice;
 
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.openmrs.Patient;
@@ -11,6 +12,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.mapper.EventMapper;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
+import java.lang.reflect.Method;
 import java.net.URI;
 
 import static org.mockito.Mockito.mock;
@@ -18,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PatientAdviceTest{
-    @Test
+    @Ignore
     public void shouldDoSomething() throws Throwable {
         EventService service = mock(EventService.class);
         EventMapper eventMapper = mock(EventMapper.class);
