@@ -16,10 +16,4 @@
   		    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
   		    http://www.springframework.org/schema/util
   		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
-
-	<!-- Add here beans related to the API context -->
-
-    <bean id="openMRSConnectionProvider" class="org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider">
-        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
-    </bean>
 </beans>

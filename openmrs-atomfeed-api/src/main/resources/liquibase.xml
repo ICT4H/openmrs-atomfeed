@@ -38,7 +38,7 @@
         </insert>
     </changeSet>
     <changeSet author="ict4h" id="org.ict4h.openmrs-atomfeed-2013-07-02-15:30">
-        <addColumn tableName="event_records" schemaName="atomfeed">
+        <addColumn tableName="event_records">
             <column name="category" type="varchar(255)"></column>
         </addColumn>
     </changeSet>

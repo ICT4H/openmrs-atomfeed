@@ -1,5 +1,6 @@
 package org.openmrs.module.atomfeed.advice;
 
+import org.ict4h.atomfeed.server.repository.AllEventRecords;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
@@ -23,7 +24,10 @@ public class PatientAdvice implements AfterReturningAdvice {
     }
 
     public PatientAdvice() throws SQLException {
-        this(new EventServiceImpl(new AllEventRecordsJdbcImpl(new OpenMRSConnectionProvider())),new EventMapper());
+        AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(new OpenMRSConnectionProvider());
+        records.setSchema("");
+        this.eventService = new EventServiceImpl(records);
+        this.eventMapper = new EventMapper();
     }
 
     @Override
