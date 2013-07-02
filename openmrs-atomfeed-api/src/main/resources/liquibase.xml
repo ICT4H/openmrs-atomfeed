@@ -12,7 +12,7 @@
             </column>
             <column name="uuid" type="varchar(40)"/>
             <column name="title" type="varchar(255)"/>
-            <column name="timestamp" type="TIMESTAMP(6)" defaultValueDate="NOW(6)"/>
+            <column name="timestamp" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP"/>
             <column name="uri" type="varchar(255)"/>
             <!-- Change to CLOB -->
             <column name="object" type="varchar(1000)"/>
