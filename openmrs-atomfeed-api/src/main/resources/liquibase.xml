@@ -5,7 +5,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet context="setup" author="ict4h" id="ict4h.feedpublishermodule-2013-03-01-18:30">
+    <changeSet context="setup" author="ict4h" id="org.ict4h.openmrs-atomfeed-2013-03-01-18:30">
         <createTable tableName="event_records">
             <column name="id" type="serial">
                 <constraints nullable="false" primaryKey="true"/>
@@ -31,10 +31,15 @@
         <modifyDataType tableName="event_records" columnName="id" newDataType="int"/>
         <addAutoIncrement tableName="event_records" columnName="id" columnDataType="int"/>
     </changeSet>
-    <changeSet id="ict4h.feedpublishermodule-2013-03-27-15:30" author="ict4h">
+    <changeSet id="org.ict4h.openmrs-atomfeed-2013-03-27-15:30" author="ict4h">
         <insert tableName="chunking_history">
             <column name="chunk_length" valueNumeric="5"></column>
             <column name="start" valueNumeric="1"></column>
         </insert>
+    </changeSet>
+    <changeSet author="ict4h" id="org.ict4h.openmrs-atomfeed-2013-07-02-15:30">
+        <addColumn tableName="event_records" schemaName="atomfeed">
+            <column name="category" type="varchar(255)"></column>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

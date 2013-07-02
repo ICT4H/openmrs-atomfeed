@@ -16,7 +16,7 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.openmrs.module</groupId>
+			<groupId>org.ict4h.openmrs</groupId>
 			<artifactId>openmrs-atomfeed-api</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
