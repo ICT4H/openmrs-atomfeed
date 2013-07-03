@@ -4,8 +4,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
-
-    <changeSet context="setup" author="ict4h" id="org.ict4h.openmrs-atomfeed-2013-03-01-18:30">
+    <changeSet author="ict4h" id="org.ict4h.openmrs-atomfeed-2013-03-01-18:30">
         <createTable tableName="event_records">
             <column name="id" type="serial">
                 <constraints nullable="false" primaryKey="true"/>
@@ -16,6 +15,7 @@
             <column name="uri" type="varchar(255)"/>
             <!-- Change to CLOB -->
             <column name="object" type="varchar(1000)"/>
+            <column name="category" type="varchar(255)"/>
         </createTable>
         <createTable tableName="chunking_history">
             <column name="id" type="serial">
@@ -36,10 +36,5 @@
             <column name="chunk_length" valueNumeric="5"></column>
             <column name="start" valueNumeric="1"></column>
         </insert>
-    </changeSet>
-    <changeSet author="ict4h" id="org.ict4h.openmrs-atomfeed-2013-07-02-15:30">
-        <addColumn tableName="event_records">
-            <column name="category" type="varchar(255)"></column>
-        </addColumn>
     </changeSet>
 </databaseChangeLog>

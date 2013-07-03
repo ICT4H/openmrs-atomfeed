@@ -1,21 +1,15 @@
 package org.openmrs.module.atomfeed.repository.hibernate;
 
 import org.hibernate.SessionFactory;
-import org.ict4h.atomfeed.server.repository.jdbc.JdbcConnectionProvider;
-import org.openmrs.api.context.Context;
+import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.openmrs.api.context.ServiceContext;
-import org.openmrs.api.db.ContextDAO;
-import org.openmrs.api.db.PatientDAO;
-import org.openmrs.api.db.hibernate.HibernatePatientDAO;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-public class OpenMRSConnectionProvider implements JdbcConnectionProvider{
+public class OpenMRSConnectionProvider implements JdbcConnectionProvider {
 
     @Override
     public Connection getConnection() throws SQLException {
