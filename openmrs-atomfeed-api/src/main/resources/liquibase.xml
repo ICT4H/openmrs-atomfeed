@@ -31,10 +31,4 @@
         <modifyDataType tableName="event_records" columnName="id" newDataType="int"/>
         <addAutoIncrement tableName="event_records" columnName="id" columnDataType="int"/>
     </changeSet>
-    <changeSet id="org.ict4h.openmrs-atomfeed-2013-03-27-15:30" author="ict4h">
-        <insert tableName="chunking_history">
-            <column name="chunk_length" valueNumeric="5"></column>
-            <column name="start" valueNumeric="1"></column>
-        </insert>
-    </changeSet>
 </databaseChangeLog>
