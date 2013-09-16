@@ -24,6 +24,10 @@
         <point>org.openmrs.api.PatientService</point>
         <class>org.openmrs.module.atomfeed.advice.PatientAdvice</class>
     </advice>
+    <advice>
+        <point>org.openmrs.api.VisitService</point>
+        <class>org.openmrs.module.atomfeed.advisor.OrderAroundAdvisor</class>
+    </advice>
 	<!-- Adds link to admin page -->
 	<extension>
 		<point>org.openmrs.admin.list</point>
