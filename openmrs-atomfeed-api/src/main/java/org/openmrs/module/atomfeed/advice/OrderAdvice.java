@@ -9,6 +9,7 @@ import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.joda.time.DateTime;
 import org.openmrs.Encounter;
 import org.openmrs.Order;
+import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
 
@@ -20,6 +21,9 @@ import java.util.Set;
 import java.util.UUID;
 
 public class OrderAdvice implements MethodInterceptor {
+    private static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s?v=full";
+    public static final String TITLE = "Encounter";
+    public static final String CATEGORY = "Encounter";
 
     private final EventService eventService;
 
@@ -37,19 +41,17 @@ public class OrderAdvice implements MethodInterceptor {
 
         Visit visitBeforeSave = (Visit) methodInvocation.getArguments()[0];
 
-        Object proceed = methodInvocation.proceed();
-
-        Visit visitAfterSave = (Visit) methodInvocation.getArguments()[0];
+        Visit visitAfterSave = (Visit) methodInvocation.proceed();
 
         List<Encounter> encounterThatShouldBePublished = getPublishableEncounters(visitBeforeSave.getEncounters(), visitAfterSave.getEncounters());
 
         for (Encounter encounter : encounterThatShouldBePublished) {
-            URI uri = new URI("");
-            Event event = new Event(UUID.randomUUID().toString(), "Encounter", DateTime.now(), uri, null, "Encounter");
+            String url = String.format(ENCOUNTER_REST_URL, encounter.getUuid());
+            Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, url, CATEGORY);
             eventService.notify(event);
         }
 
-        return proceed;
+        return visitAfterSave;
     }
 
     private List<Encounter> getPublishableEncounters(Set<Encounter> beforeSaveEncounters, Set<Encounter> afterSaveEncounters) {

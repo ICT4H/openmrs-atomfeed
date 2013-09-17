@@ -63,12 +63,17 @@ public class VisitBuilder {
         order.setDateChanged(null);
         order.setConcept(concept);
 
-        for (Encounter encounter : visit.getEncounters()) {
-            if (encounter.getUuid().equals(lastEncounterUuid)) {
-                 encounter.addOrder(order);
-                 break;
+        Encounter encounter = findEncounterByUuid(lastEncounterUuid);
+        encounter.addOrder(order);
+    }
+
+    private Encounter findEncounterByUuid(String uuid) {
+        for (Encounter encounter : this.visit.getEncounters()) {
+            if (encounter.getUuid().equals(uuid)) {
+                return encounter;
             }
         }
+        return null;
     }
 
     public Visit build() {
@@ -82,28 +87,21 @@ public class VisitBuilder {
         return new VisitBuilder(visitCopy);
     }
 
-    public VisitBuilder saveEncounter(String lastEncounterUuid) {
-        for (Encounter encounter : visit.getEncounters()) {
-            if (encounter.getUuid().equals(lastEncounterUuid)) {
-                if (encounter.getDateCreated() == null ){
-                    encounter.setDateCreated(new Date());
-                }
-                encounter.setDateChanged(new Date());
-                break;
-            }
+    public VisitBuilder saveEncounter(String encounterUuid) {
+        Encounter encounter = findEncounterByUuid(encounterUuid);
+        if (encounter.getDateCreated() == null ){
+            encounter.setDateCreated(new Date());
         }
+        encounter.setDateChanged(new Date());
+        this.lastEncounterUuid = encounterUuid;
         return this;
     }
 
     public VisitBuilder saveOrders() {
-        for (Encounter encounter : visit.getEncounters()) {
-            if (encounter.getUuid().equals(lastEncounterUuid)) {
-                for (Order order : encounter.getOrders()) {
-                    if (order.getDateCreated() == null) {
-                        order.setDateCreated(new Date());
-                    }
-                }
-                break;
+        Encounter encounter = findEncounterByUuid(lastEncounterUuid);
+        for (Order order : encounter.getOrders()) {
+            if (order.getDateCreated() == null) {
+                order.setDateCreated(new Date());
             }
         }
         return this;
@@ -118,6 +116,18 @@ public class VisitBuilder {
     public VisitBuilder order(Concept concept) {
         createOrder(concept);
         saveOrders();
+        return this;
+    }
+
+    public VisitBuilder deleteOrder(String encounterId, Concept concept) {
+        Encounter encounter = findEncounterByUuid(encounterId);
+        for (Order order : encounter.getOrders()) {
+            if (order.getConcept().equals(concept)) {
+                order.setVoided(true);
+                order.setDateVoided(new Date());
+                break;
+            }
+        }
         return this;
     }
 }
