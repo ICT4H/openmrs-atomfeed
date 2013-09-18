@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class OrderAdvice implements MethodInterceptor {
-    private static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s?v=full";
+    private static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s";
     public static final String TITLE = "Encounter";
     public static final String CATEGORY = "Encounter";
 
@@ -40,13 +40,14 @@ public class OrderAdvice implements MethodInterceptor {
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
 
         Visit visitBeforeSave = (Visit) methodInvocation.getArguments()[0];
-
+        EncounterSnapshot encounterSnapshotBeforeSave = new EncounterSnapshot(visitBeforeSave.getEncounters());
         Visit visitAfterSave = (Visit) methodInvocation.proceed();
+        EncounterSnapshot encounterSnapshotAfterSave = new EncounterSnapshot(visitAfterSave.getEncounters());
 
-        List<Encounter> encounterThatShouldBePublished = getPublishableEncounters(visitBeforeSave.getEncounters(), visitAfterSave.getEncounters());
+        List<String> changedEncounters = encounterSnapshotBeforeSave.changedEncounters(encounterSnapshotAfterSave);
 
-        for (Encounter encounter : encounterThatShouldBePublished) {
-            String url = String.format(ENCOUNTER_REST_URL, encounter.getUuid());
+        for (String encounterUuid : changedEncounters) {
+            String url = String.format(ENCOUNTER_REST_URL, encounterUuid);
             Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, url, CATEGORY);
             eventService.notify(event);
         }
@@ -54,62 +55,7 @@ public class OrderAdvice implements MethodInterceptor {
         return visitAfterSave;
     }
 
-    private List<Encounter> getPublishableEncounters(Set<Encounter> beforeSaveEncounters, Set<Encounter> afterSaveEncounters) {
-        List<Encounter> publishedEncounters = new ArrayList<Encounter>();
 
-        for (Encounter beforeSaveEncounter : beforeSaveEncounters) {
-
-            for (Encounter afterSaveEncounter : afterSaveEncounters) {
-
-                //the equals method only verifies the UUID
-                if (beforeSaveEncounter.equals(afterSaveEncounter)){
-
-                    if (areAnyOfOrdersPublishable(beforeSaveEncounter.getOrders(), afterSaveEncounter.getOrders())){
-
-                        publishedEncounters.add(afterSaveEncounter);
-
-                        break;
-
-                    }
-
-                }
-            }
-        }
-
-
-        return publishedEncounters;
-    }
-
-    private boolean areAnyOfOrdersPublishable(Set<Order> beforeSaveOrders, Set<Order> afterSaveOrders) {
-        for (Order beforeSaveOrder : beforeSaveOrders) {
-
-            for (Order afterSaveOrder : afterSaveOrders) {
-
-                if (IsOrderPublishable(beforeSaveOrder, afterSaveOrder)) {
-
-                    return true;
-                }
-            }
-
-        }
-        return false;
-    }
-
-    private boolean IsOrderPublishable(Order beforeSaveOrder, Order afterSaveOrder) {
-
-        if (beforeSaveOrder.getDateCreated() == null) {
-            return true;
-        }
-
-        if (beforeSaveOrder.equals(afterSaveOrder)){
-
-            if (!afterSaveOrder.getVoided().equals(beforeSaveOrder.getVoided()) ){
-                return true;
-            }
-
-        }
-        return false;
-    }
 
 
 }

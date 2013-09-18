@@ -6,19 +6,10 @@ import org.ict4h.atomfeed.server.service.EventService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.openmrs.Concept;
-import org.openmrs.ConceptClass;
-import org.openmrs.ConceptName;
-import org.openmrs.Patient;
-import org.openmrs.PersonName;
-import org.openmrs.Visit;
+import org.openmrs.*;
 import org.openmrs.module.atomfeed.builder.VisitBuilder;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -148,6 +139,8 @@ public class OrderAdviceTest {
         assertEquals(String.format(ENCOUNTER_REST_URL, uuid), argument.getValue().getContents());
 
     }
+
+
 
 
 
