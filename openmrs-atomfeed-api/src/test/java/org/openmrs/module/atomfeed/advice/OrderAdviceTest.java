@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 
 public class OrderAdviceTest {
-    private static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s?v=full";
+    private static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s";
 
     private EventService eventService;
     private OrderAdvice orderAdvice;
