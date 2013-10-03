@@ -20,8 +20,6 @@ import static org.mockito.Mockito.when;
 
 
 public class OrderAdviceTest {
-    private static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s";
-
     private EventService eventService;
     private OrderAdvice orderAdvice;
     private Patient patient;
@@ -68,7 +66,7 @@ public class OrderAdviceTest {
 
         verify(eventService).notify(argument.capture());
 
-        assertEquals(String.format(ENCOUNTER_REST_URL, uuid), argument.getValue().getContents());
+        assertEquals(String.format(OrderAdvice.ENCOUNTER_REST_URL, uuid), argument.getValue().getContents());
     }
 
 
@@ -116,7 +114,7 @@ public class OrderAdviceTest {
 
         verify(eventService).notify(argument.capture());
 
-        assertEquals(String.format(ENCOUNTER_REST_URL, newUuid), argument.getValue().getContents());
+        assertEquals(String.format(OrderAdvice.ENCOUNTER_REST_URL, newUuid), argument.getValue().getContents());
 
     }
 
@@ -136,7 +134,7 @@ public class OrderAdviceTest {
 
         verify(eventService).notify(argument.capture());
 
-        assertEquals(String.format(ENCOUNTER_REST_URL, uuid), argument.getValue().getContents());
+        assertEquals(String.format(OrderAdvice.ENCOUNTER_REST_URL, uuid), argument.getValue().getContents());
 
     }
 

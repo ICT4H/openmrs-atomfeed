@@ -1,6 +1,5 @@
 package org.openmrs.module.atomfeed.repository.hibernate;
 
-import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.server.exceptions.AtomFeedRuntimeException;
@@ -25,5 +24,10 @@ public class OpenMRSConnectionProvider implements JdbcConnectionProvider {
         } catch (Exception e) {
             throw new AtomFeedRuntimeException(e);
         }
+    }
+
+    @Override
+    public void closeConnection(Connection connection) throws SQLException {
+        connection.close();
     }
 }

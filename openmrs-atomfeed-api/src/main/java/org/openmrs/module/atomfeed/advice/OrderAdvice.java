@@ -7,21 +7,16 @@ import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.joda.time.DateTime;
-import org.openmrs.Encounter;
-import org.openmrs.Order;
-import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
 
 import java.net.URI;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public class OrderAdvice implements MethodInterceptor {
-    private static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s";
+    public static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s?v=custom:(uuid,patient,orders:(uuid,orderType,concept))";
     public static final String TITLE = "Encounter";
     public static final String CATEGORY = "Encounter";
 
