@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class OrderAdvice implements MethodInterceptor {
-    public static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s?v=custom:(uuid,patient,orders:(uuid,orderType,concept))";
+    public static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s?v=custom:(uuid,patient,visit,orders:(uuid,orderType,concept))";
     public static final String TITLE = "Encounter";
     public static final String CATEGORY = "Encounter";
 
