@@ -26,9 +26,10 @@
     </advice>
 
     <advice>
-        <point>org.openmrs.api.VisitService</point>
-        <class>org.openmrs.module.atomfeed.advisor.OrderAroundAdvisor</class>
+        <point>org.openmrs.module.emrapi.encounter.EmrEncounterService</point>
+        <class>org.openmrs.module.atomfeed.advisor.EmrEncouterServiceAdvisor</class>
     </advice>
+
     <!-- Adds link to admin page -->
 	<extension>
 		<point>org.openmrs.admin.list</point>
