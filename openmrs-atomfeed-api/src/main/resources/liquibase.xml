@@ -31,4 +31,14 @@
         <modifyDataType tableName="event_records" columnName="id" newDataType="int"/>
         <addAutoIncrement tableName="event_records" columnName="id" columnDataType="int"/>
     </changeSet>
+    <changeSet author="ict4h" id="org.ict4h.openmrs-atomfeed-2014-01-02-00:00">
+        <createTable tableName="event_records_offset_marker">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="event_id" type="int"/>
+            <column name="event_count" type="int"/>
+            <column name="category" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
