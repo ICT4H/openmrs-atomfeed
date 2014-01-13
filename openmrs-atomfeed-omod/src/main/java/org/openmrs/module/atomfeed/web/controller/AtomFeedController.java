@@ -5,7 +5,7 @@ import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.server.domain.chunking.number.NumberChunkingHistory;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
-import org.ict4h.atomfeed.server.repository.jdbc.EventRecordsOffsetMarkersJdbcImpl;
+import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdbcImpl;
 import org.ict4h.atomfeed.server.service.EventFeedService;
 import org.ict4h.atomfeed.server.service.EventFeedServiceImpl;
 import org.ict4h.atomfeed.server.service.feedgenerator.FeedGeneratorFactory;
@@ -32,7 +32,7 @@ public class AtomFeedController {
         JdbcConnectionProvider provider = new OpenMRSConnectionProvider();
         this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
                 new AllEventRecordsJdbcImpl(provider),
-                new EventRecordsOffsetMarkersJdbcImpl(provider),
+                new AllEventRecordsOffsetMarkersJdbcImpl(provider),
                 new ChunkingEntriesJdbcImpl(provider),
                 new ResourceHelper()));
     }
