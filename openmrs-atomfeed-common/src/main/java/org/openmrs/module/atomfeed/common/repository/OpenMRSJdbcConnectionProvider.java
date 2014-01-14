@@ -1,3 +1,5 @@
+package org.openmrs.module.atomfeed.common.repository;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
