@@ -41,7 +41,8 @@
 
 	<modules>
 		<module>openmrs-atomfeed-api</module>
-		<module>openmrs-atomfeed-omod</module>
+        <module>openmrs-atomfeed-omod</module>
+        <module>openmrs-atomfeed-common</module>
 	</modules>
 	
 	<properties>
@@ -52,7 +53,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-		
             <dependency>
                 <groupId>org.ict4h</groupId>
                 <artifactId>atomfeed-server</artifactId>
