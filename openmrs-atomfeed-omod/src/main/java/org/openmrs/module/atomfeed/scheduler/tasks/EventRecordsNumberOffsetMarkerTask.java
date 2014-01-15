@@ -9,6 +9,7 @@ import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdb
 import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
 import org.ict4h.atomfeed.server.service.NumberOffsetMarkerServiceImpl;
 import org.ict4h.atomfeed.server.service.OffsetMarkerService;
+import org.openmrs.module.atomfeed.common.repository.OpenMRSJdbcConnectionProvider;
 import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
 import org.openmrs.scheduler.tasks.AbstractTask;
 
@@ -17,18 +18,10 @@ import java.sql.SQLException;
 
 public class EventRecordsNumberOffsetMarkerTask extends AbstractTask {
     private int OFFSET_BY_NUMBER_OF_RECORDS_PER_CATEGORY = 1000;
-
-    public class CustomConnectionProvider extends OpenMRSConnectionProvider {
-        @Override
-        public void closeConnection(Connection connection) throws SQLException {
-            //do nothing
-        }
-    }
-
     @Override
     public void execute() {
         System.out.println("Executing task: EventRecordsNumberOffsetMarkerTask");
-        JdbcConnectionProvider connectionProvider = new CustomConnectionProvider();
+        JdbcConnectionProvider connectionProvider = new OpenMRSJdbcConnectionProvider();
         AllEventRecords allEventRecords = new AllEventRecordsJdbcImpl(connectionProvider);
         AllEventRecordsOffsetMarkers eventRecordsOffsetMarkers = new AllEventRecordsOffsetMarkersJdbcImpl(connectionProvider);
         ChunkingEntries chunkingEntries = new ChunkingEntriesJdbcImpl(connectionProvider);

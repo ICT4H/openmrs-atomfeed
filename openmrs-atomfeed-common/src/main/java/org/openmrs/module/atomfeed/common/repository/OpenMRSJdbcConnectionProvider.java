@@ -5,12 +5,11 @@ import org.hibernate.classic.Session;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.openmrs.api.context.ServiceContext;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
-import java.lang.reflect.*;
-import java.sql.*;
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-@Component
 public class OpenMRSJdbcConnectionProvider implements JdbcConnectionProvider {
 
     @Override
