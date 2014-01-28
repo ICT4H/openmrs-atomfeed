@@ -6,12 +6,15 @@ import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.joda.time.DateTime;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
 import org.springframework.aop.AfterReturningAdvice;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 public class EncounterSaveAdvice implements AfterReturningAdvice {
@@ -20,10 +23,11 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
     public static final String TITLE = "Encounter";
     public static final String CATEGORY = "Encounter";
 
-    private final EventService eventService;
+    private EventService eventService;
 
     public EncounterSaveAdvice() throws SQLException {
-        AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(new OpenMRSConnectionProvider());
+        List<PlatformTransactionManager> platformTransactionManagers = Context.getRegisteredComponents(PlatformTransactionManager.class);
+        AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(new OpenMRSConnectionProvider(platformTransactionManagers.get(0)));
         this.eventService = new EventServiceImpl(records);
     }
 

@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 public class EmrEncouterServiceAdvisor extends StaticMethodMatcherPointcutAdvisor implements Advisor {
-
     private static final String SAVE_METHOD = "save";
 
     @Override

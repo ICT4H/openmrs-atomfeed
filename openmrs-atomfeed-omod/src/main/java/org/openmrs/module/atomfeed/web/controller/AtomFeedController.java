@@ -11,7 +11,9 @@ import org.ict4h.atomfeed.server.service.feedgenerator.FeedGeneratorFactory;
 import org.ict4h.atomfeed.server.service.helper.EventFeedServiceHelper;
 import org.ict4h.atomfeed.server.service.helper.ResourceHelper;
 import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,8 +27,9 @@ public class AtomFeedController {
     private static Logger logger = Logger.getLogger(AtomFeedController.class);
     private EventFeedService eventFeedService;
 
-    public AtomFeedController() {
-        JdbcConnectionProvider provider = new OpenMRSConnectionProvider();
+    @Autowired
+    public AtomFeedController(PlatformTransactionManager transactionManager) {
+        JdbcConnectionProvider provider = new OpenMRSConnectionProvider(transactionManager);
         this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
                 new AllEventRecordsJdbcImpl(provider),
                 new AllEventRecordsOffsetMarkersJdbcImpl(provider),

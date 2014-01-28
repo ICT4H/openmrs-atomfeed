@@ -4,13 +4,25 @@ import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.openmrs.api.context.ServiceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class OpenMRSJdbcConnectionProvider implements JdbcConnectionProvider {
+
+    private PlatformTransactionManager transactionManager;
+    private TransactionStatus transactionStatus; // TODO : Mujir/Sush - can this be a field. One instance of bean.
+
+    @Autowired
+    public OpenMRSJdbcConnectionProvider(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
 
     @Override
     public Connection getConnection() throws SQLException {
@@ -29,6 +41,21 @@ public class OpenMRSJdbcConnectionProvider implements JdbcConnectionProvider {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void startTransaction() {
+        transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+    }
+
+    @Override
+    public void commit() {
+        transactionManager.commit(transactionStatus);
+    }
+
+    @Override
+    public void rollback() {
+        transactionManager.rollback(transactionStatus);
     }
 
     @Override
