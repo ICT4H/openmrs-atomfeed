@@ -6,6 +6,8 @@ import org.ict4h.atomfeed.server.exceptions.AtomFeedRuntimeException;
 import org.openmrs.api.context.ServiceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -14,6 +16,8 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Component
+@Scope("prototype")
 public class OpenMRSConnectionProvider implements JdbcConnectionProvider {
     private PlatformTransactionManager transactionManager;
     private TransactionStatus transactionStatus; // TODO : Mujir/Sush - can this be a field. One instance of bean.
