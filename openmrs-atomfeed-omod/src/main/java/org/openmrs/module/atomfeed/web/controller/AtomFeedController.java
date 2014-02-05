@@ -30,6 +30,7 @@ public class AtomFeedController {
     @Autowired
     public AtomFeedController(PlatformTransactionManager transactionManager) {
         JdbcConnectionProvider provider = new OpenMRSConnectionProvider(transactionManager);
+        //JdbcConnectionProvider provider = new OpenMRSJdbcConnectionProvider(transactionManager);
         this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
                 new AllEventRecordsJdbcImpl(provider),
                 new AllEventRecordsOffsetMarkersJdbcImpl(provider),
