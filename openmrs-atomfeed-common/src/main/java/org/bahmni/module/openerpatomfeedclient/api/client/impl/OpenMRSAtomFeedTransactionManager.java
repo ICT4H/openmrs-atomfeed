@@ -73,28 +73,28 @@ public class OpenMRSAtomFeedTransactionManager implements AFTransactionManager, 
         //
     }
 
-//
-//    /**
-//     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
-//     */
-//    @Override
-//    public void startTransaction() {
-//
-//    }
-//
-//    /**
-//     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
-//     */
-//    @Override
-//    public void commit() {
-//
-//    }
-//
-//    /**
-//     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
-//     */
-//    @Override
-//    public void rollback() {
-//
-//    }
+
+    /**
+     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
+     */
+    @Override
+    public void startTransaction() {
+
+    }
+
+    /**
+     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
+     */
+    @Override
+    public void commit() {
+
+    }
+
+    /**
+     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
+     */
+    @Override
+    public void rollback() {
+
+    }
 }

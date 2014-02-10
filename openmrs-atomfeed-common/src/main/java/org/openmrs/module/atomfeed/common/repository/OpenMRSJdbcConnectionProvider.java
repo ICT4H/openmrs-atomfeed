@@ -28,14 +28,6 @@ import java.sql.SQLException;
         this.transactionManager = transactionManager;
     }
 
-    private PlatformTransactionManager transactionManager;
-    private TransactionStatus transactionStatus; // TODO : Mujir/Sush - can this be a field. One instance of bean.
-
-    @Autowired
-    public OpenMRSJdbcConnectionProvider(PlatformTransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
-
     @Override
     public Connection getConnection() throws SQLException {
         return getSession().connection();
