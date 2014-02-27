@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -25,18 +26,16 @@ public class OpenMRSAtomFeedTransactionManager implements AFTransactionManager, 
     }
 
     @Override
-    public void executeWithTransaction(final AFTransactionWork action) throws Exception {
+    public <T> T executeWithTransaction(final AFTransactionWork<T> action) throws Exception {
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
         transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        //action.getDefinition()
-        transactionTemplate.execute( new TransactionCallbackWithoutResult() {
-                    @Override
-                    protected void doInTransactionWithoutResult(TransactionStatus status) {
-                        action.execute();
-                    }
-                });
+        return transactionTemplate.execute( new TransactionCallback<T>() {
+            @Override
+            public T doInTransaction(TransactionStatus status) {
+                return action.execute();
+            }
+        });
     }
-
 
     /**
      * @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
@@ -97,4 +96,5 @@ public class OpenMRSAtomFeedTransactionManager implements AFTransactionManager, 
     public void rollback() {
 
     }
+
 }

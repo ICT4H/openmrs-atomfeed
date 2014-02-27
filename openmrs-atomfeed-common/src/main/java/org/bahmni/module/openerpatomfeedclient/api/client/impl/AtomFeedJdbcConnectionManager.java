@@ -20,11 +20,12 @@ public class AtomFeedJdbcConnectionManager implements AFTransactionManager, Jdbc
     }
 
     @Override
-    public void executeWithTransaction(AFTransactionWork action) throws Exception {
+    public <T> T executeWithTransaction(AFTransactionWork<T> action) throws Exception {
         try {
             startTransaction();
-            action.execute();
+            T result = action.execute();
             commit();
+            return result;
         } catch (Exception e) {
             rollback();
             throw new Exception(e);
