@@ -3,24 +3,24 @@ package org.bahmni.module.openerpatomfeedclient.api.client.impl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.ict4h.atomfeed.client.service.AFTransactionManager;
-import org.ict4h.atomfeed.client.service.AFTransactionWork;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
+import org.ict4h.atomfeed.transaction.AFTransactionManager;
+import org.ict4h.atomfeed.transaction.AFTransactionWork;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 
-public class AtomFeedJdbcConnectionManager implements AFTransactionManager, JdbcConnectionProvider {
+public class AtomFeedHibernateConnectionManager implements AFTransactionManager, JdbcConnectionProvider {
 
     private final SessionFactory sessionFactory;
 
-    public AtomFeedJdbcConnectionManager(SessionFactory sessionFactory) {
+    public AtomFeedHibernateConnectionManager(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public <T> T executeWithTransaction(AFTransactionWork<T> action) throws Exception {
+    public <T> T executeWithTransaction(AFTransactionWork<T> action) throws RuntimeException {
         try {
             startTransaction();
             T result = action.execute();
@@ -28,7 +28,7 @@ public class AtomFeedJdbcConnectionManager implements AFTransactionManager, Jdbc
             return result;
         } catch (Exception e) {
             rollback();
-            throw new Exception(e);
+            throw new RuntimeException(e);
         }
     }
 

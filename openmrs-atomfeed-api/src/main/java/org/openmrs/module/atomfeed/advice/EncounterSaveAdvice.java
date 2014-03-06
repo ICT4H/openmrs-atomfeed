@@ -1,13 +1,15 @@
 package org.openmrs.module.atomfeed.advice;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.bahmni.module.openerpatomfeedclient.api.client.impl.AtomFeedSpringTransactionManager;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
+import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 import org.joda.time.DateTime;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
+//import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -22,12 +24,15 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
     public static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s?v=custom:(uuid,encounterType,patient,visit,orders:(uuid,orderType,concept,voided))";
     public static final String TITLE = "Encounter";
     public static final String CATEGORY = "Encounter";
+    private final AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
 
     private EventService eventService;
 
     public EncounterSaveAdvice() throws SQLException {
-        List<PlatformTransactionManager> platformTransactionManagers = Context.getRegisteredComponents(PlatformTransactionManager.class);
-        AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(new OpenMRSConnectionProvider(platformTransactionManagers.get(0)));
+        PlatformTransactionManager platformTransactionManager = getSpringPlatformTransactionManager();
+        atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(platformTransactionManager);
+        //AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(new OpenMRSConnectionProvider(platformTransactionManager));
+        AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(atomFeedSpringTransactionManager);
         this.eventService = new EventServiceImpl(records);
     }
 
@@ -35,7 +40,24 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
     public void afterReturning(Object returnValue, Method save, Object[] args, Object emrEncounterService) throws Throwable {
         Object encounterUuid = PropertyUtils.getProperty(returnValue, "encounterUuid");
         String url = String.format(ENCOUNTER_REST_URL, encounterUuid);
-        Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, url, CATEGORY);
-        eventService.notify(event);
+        final Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, url, CATEGORY);
+
+        atomFeedSpringTransactionManager.executeWithTransaction(
+                new AFTransactionWorkWithoutResult() {
+                    @Override
+                    protected void doInTransaction() {
+                        eventService.notify(event);
+                    }
+                    @Override
+                    public PropagationDefinition getTxPropagationDefinition() {
+                        return PropagationDefinition.PROPAGATION_REQUIRED;
+                    }
+                }
+        );
+    }
+
+    private PlatformTransactionManager getSpringPlatformTransactionManager() {
+        List<PlatformTransactionManager> platformTransactionManagers = Context.getRegisteredComponents(PlatformTransactionManager.class);
+        return platformTransactionManagers.get(0);
     }
 }

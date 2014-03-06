@@ -2,39 +2,48 @@ package org.bahmni.module.openerpatomfeedclient.api.client.impl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
-import org.ict4h.atomfeed.client.service.AFTransactionWork;
-import org.ict4h.atomfeed.client.service.AFTransactionManager;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
+import org.ict4h.atomfeed.transaction.AFTransactionManager;
+import org.ict4h.atomfeed.transaction.AFTransactionWork;
 import org.openmrs.api.context.ServiceContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
-public class OpenMRSAtomFeedTransactionManager implements AFTransactionManager, JdbcConnectionProvider {
+public class AtomFeedSpringTransactionManager implements AFTransactionManager, JdbcConnectionProvider {
     private PlatformTransactionManager transactionManager;
+    private Map<AFTransactionWork.PropagationDefinition, Integer> propagationMap = new HashMap<AFTransactionWork.PropagationDefinition, Integer>();
 
-    public OpenMRSAtomFeedTransactionManager(PlatformTransactionManager transactionManager) {
+    public AtomFeedSpringTransactionManager(PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
+        propagationMap.put(AFTransactionWork.PropagationDefinition.PROPAGATION_REQUIRED, TransactionDefinition.PROPAGATION_REQUIRED);
+        propagationMap.put(AFTransactionWork.PropagationDefinition.PROPAGATION_REQUIRES_NEW, TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     }
 
     @Override
-    public <T> T executeWithTransaction(final AFTransactionWork<T> action) throws Exception {
+    public <T> T executeWithTransaction(final AFTransactionWork<T> action) throws RuntimeException {
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        Integer txPropagationDef = getTxPropagation(action.getTxPropagationDefinition());
+        transactionTemplate.setPropagationBehavior(txPropagationDef);
         return transactionTemplate.execute( new TransactionCallback<T>() {
             @Override
             public T doInTransaction(TransactionStatus status) {
                 return action.execute();
             }
         });
+    }
+
+    private Integer getTxPropagation(AFTransactionWork.PropagationDefinition propagationDefinition) {
+        return propagationMap.get(propagationDefinition);
     }
 
     /**
