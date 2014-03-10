@@ -78,7 +78,7 @@ public class AtomFeedSpringTransactionManager implements AFTransactionManager, J
      */
     @Override
     public void closeConnection(Connection connection) throws SQLException {
-        //
+        System.out.println("Close Connection called. This should not happen");
     }
 
 
@@ -87,7 +87,7 @@ public class AtomFeedSpringTransactionManager implements AFTransactionManager, J
      */
     @Override
     public void startTransaction() {
-
+        System.out.println("Start Tx called. This should not happen");
     }
 
     /**
@@ -95,7 +95,7 @@ public class AtomFeedSpringTransactionManager implements AFTransactionManager, J
      */
     @Override
     public void commit() {
-
+        System.out.println("Commit called. This should not happen");
     }
 
     /**
@@ -103,7 +103,7 @@ public class AtomFeedSpringTransactionManager implements AFTransactionManager, J
      */
     @Override
     public void rollback() {
-
+        System.out.println("Rollback called. This should not happen");
     }
 
 }

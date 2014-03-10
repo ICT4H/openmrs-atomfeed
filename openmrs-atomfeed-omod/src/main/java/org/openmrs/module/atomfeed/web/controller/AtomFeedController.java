@@ -1,7 +1,7 @@
 package org.openmrs.module.atomfeed.web.controller;
 
 import org.apache.log4j.Logger;
-import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
+import org.bahmni.module.openerpatomfeedclient.api.client.impl.AtomFeedSpringTransactionManager;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
@@ -10,7 +10,6 @@ import org.ict4h.atomfeed.server.service.EventFeedServiceImpl;
 import org.ict4h.atomfeed.server.service.feedgenerator.FeedGeneratorFactory;
 import org.ict4h.atomfeed.server.service.helper.EventFeedServiceHelper;
 import org.ict4h.atomfeed.server.service.helper.ResourceHelper;
-import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -25,16 +24,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/atomfeed")
 public class AtomFeedController {
     private static Logger logger = Logger.getLogger(AtomFeedController.class);
+    private AtomFeedSpringTransactionManager atomTxManager;
     private EventFeedService eventFeedService;
 
     @Autowired
     public AtomFeedController(PlatformTransactionManager transactionManager) {
-        JdbcConnectionProvider provider = new OpenMRSConnectionProvider(transactionManager);
-        //JdbcConnectionProvider provider = new OpenMRSJdbcConnectionProvider(transactionManager);
+        atomTxManager = new AtomFeedSpringTransactionManager(transactionManager);
         this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
-                new AllEventRecordsJdbcImpl(provider),
-                new AllEventRecordsOffsetMarkersJdbcImpl(provider),
-                new ChunkingEntriesJdbcImpl(provider),
+                new AllEventRecordsJdbcImpl(atomTxManager),
+                new AllEventRecordsOffsetMarkersJdbcImpl(atomTxManager),
+                new ChunkingEntriesJdbcImpl(atomTxManager),
                 new ResourceHelper()));
     }
 
@@ -46,7 +45,7 @@ public class AtomFeedController {
     @ResponseBody
     public String getRecentEventFeedForCategory(HttpServletRequest httpServletRequest, @PathVariable String category) {
         return EventFeedServiceHelper.getRecentFeed(eventFeedService, httpServletRequest.getRequestURL().toString(),
-                category, logger);
+                category, logger, atomTxManager);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{category}/{n}")
@@ -54,6 +53,6 @@ public class AtomFeedController {
     public String getEventFeedWithCategory(HttpServletRequest httpServletRequest,
                                            @PathVariable String category, @PathVariable int n) {
         return EventFeedServiceHelper.getEventFeed(eventFeedService, httpServletRequest.getRequestURL().toString(),
-                category, n, logger);
+                category, n, logger, atomTxManager);
     }
 }

@@ -27,12 +27,7 @@ public class PatientAdvice implements AfterReturningAdvice {
     private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
     private EventService eventService;
 
-    public PatientAdvice(EventService eventService) {
-        this.eventService = eventService;
-    }
-
     public PatientAdvice() throws SQLException {
-        List<PlatformTransactionManager> platformTransactionManagers = Context.getRegisteredComponents(PlatformTransactionManager.class);
         atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
         AllEventRecordsJdbcImpl records = new AllEventRecordsJdbcImpl(atomFeedSpringTransactionManager);
         this.eventService = new EventServiceImpl(records);

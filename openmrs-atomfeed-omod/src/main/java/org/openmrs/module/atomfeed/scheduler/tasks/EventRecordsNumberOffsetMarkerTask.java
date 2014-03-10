@@ -1,7 +1,6 @@
 package org.openmrs.module.atomfeed.scheduler.tasks;
 
 import org.bahmni.module.openerpatomfeedclient.api.client.impl.AtomFeedSpringTransactionManager;
-import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.server.repository.AllEventRecords;
 import org.ict4h.atomfeed.server.repository.AllEventRecordsOffsetMarkers;
 import org.ict4h.atomfeed.server.repository.ChunkingEntries;
@@ -10,12 +9,9 @@ import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdb
 import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
 import org.ict4h.atomfeed.server.service.NumberOffsetMarkerServiceImpl;
 import org.ict4h.atomfeed.server.service.OffsetMarkerService;
-import org.ict4h.atomfeed.transaction.AFTransactionWork;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.atomfeed.common.repository.OpenMRSJdbcConnectionProvider;
 import org.openmrs.scheduler.tasks.AbstractTask;
-import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.List;

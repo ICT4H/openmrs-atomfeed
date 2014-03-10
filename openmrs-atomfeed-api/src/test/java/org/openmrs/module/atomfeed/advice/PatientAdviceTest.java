@@ -16,7 +16,8 @@ public class PatientAdviceTest {
         EventService service = mock(EventService.class);
         Patient patient = new Patient();
         Event event = new Event(null, null, null, new URI(""), null, null);
-        new PatientAdvice(service).afterReturning(patient, null, null, null);
+        //should mock openmrs Context.getRegisteredComponents(PlatformTransactionManager.class);
+        new PatientAdvice().afterReturning(patient, null, null, null);
         verify(service).notify(event);
     }
 }

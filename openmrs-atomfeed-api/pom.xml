@@ -53,6 +53,13 @@
 			<scope>test</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>org.ict4h.openmrs</groupId>
+            <artifactId>openmrs-atomfeed-common</artifactId>
+            <version>${project.parent.version}</version>
+            <type>jar</type>
+        </dependency>
+
 	</dependencies>
 	
 	<build>
