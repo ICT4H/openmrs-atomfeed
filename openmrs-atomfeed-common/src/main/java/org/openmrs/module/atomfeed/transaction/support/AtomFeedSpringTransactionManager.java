@@ -1,4 +1,4 @@
-package org.bahmni.module.openerpatomfeedclient.api.client.impl;
+package org.openmrs.module.atomfeed.transaction.support;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
