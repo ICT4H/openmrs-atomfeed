@@ -1,7 +1,6 @@
 package org.openmrs.module.atomfeed.web.controller;
 
 import org.apache.log4j.Logger;
-import org.bahmni.module.openerpatomfeedclient.api.client.impl.AtomFeedSpringTransactionManager;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
@@ -10,6 +9,7 @@ import org.ict4h.atomfeed.server.service.EventFeedServiceImpl;
 import org.ict4h.atomfeed.server.service.feedgenerator.FeedGeneratorFactory;
 import org.ict4h.atomfeed.server.service.helper.EventFeedServiceHelper;
 import org.ict4h.atomfeed.server.service.helper.ResourceHelper;
+import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;

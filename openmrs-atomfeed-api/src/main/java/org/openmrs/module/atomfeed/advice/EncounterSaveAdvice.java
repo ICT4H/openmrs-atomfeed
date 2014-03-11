@@ -1,7 +1,6 @@
 package org.openmrs.module.atomfeed.advice;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.bahmni.module.openerpatomfeedclient.api.client.impl.AtomFeedSpringTransactionManager;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
@@ -9,7 +8,7 @@ import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 import org.joda.time.DateTime;
 import org.openmrs.api.context.Context;
-//import org.openmrs.module.atomfeed.repository.hibernate.OpenMRSConnectionProvider;
+import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.transaction.PlatformTransactionManager;
 
