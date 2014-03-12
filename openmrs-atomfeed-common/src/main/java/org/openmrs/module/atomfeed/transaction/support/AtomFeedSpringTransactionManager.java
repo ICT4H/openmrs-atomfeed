@@ -71,39 +71,4 @@ public class AtomFeedSpringTransactionManager implements AFTransactionManager, J
         }
     }
 
-    /**
-     * @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
-     * @param connection
-     * @throws SQLException
-     */
-    @Override
-    public void closeConnection(Connection connection) throws SQLException {
-        System.out.println("Close Connection called. This should not happen");
-    }
-
-
-    /**
-     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
-     */
-    @Override
-    public void startTransaction() {
-        System.out.println("Start Tx called. This should not happen");
-    }
-
-    /**
-     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
-     */
-    @Override
-    public void commit() {
-        System.out.println("Commit called. This should not happen");
-    }
-
-    /**
-     *  @see org.ict4h.atomfeed.jdbc.JdbcConnectionProvider
-     */
-    @Override
-    public void rollback() {
-        System.out.println("Rollback called. This should not happen");
-    }
-
 }
