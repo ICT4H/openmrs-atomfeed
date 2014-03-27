@@ -27,7 +27,7 @@
 
     <advice>
         <point>org.openmrs.module.emrapi.encounter.EmrEncounterService</point>
-        <class>org.openmrs.module.atomfeed.advisor.EmrEncouterServiceAdvisor</class>
+        <class>org.openmrs.module.atomfeed.advice.EncounterSaveAdvice</class>
     </advice>
 
     <!-- Adds link to admin page -->

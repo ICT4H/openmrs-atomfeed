@@ -25,6 +25,8 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
     public static final String CATEGORY = "Encounter";
     private final AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
 
+    private static final String SAVE_METHOD = "save";
+
     private EventService eventService;
 
     public EncounterSaveAdvice() throws SQLException {
@@ -36,23 +38,25 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
     }
 
     @Override
-    public void afterReturning(Object returnValue, Method save, Object[] args, Object emrEncounterService) throws Throwable {
-        Object encounterUuid = PropertyUtils.getProperty(returnValue, "encounterUuid");
-        String url = String.format(ENCOUNTER_REST_URL, encounterUuid);
-        final Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, url, CATEGORY);
+    public void afterReturning(Object returnValue, Method method, Object[] args, Object emrEncounterService) throws Throwable {
+        if (method.getName().equals(SAVE_METHOD)) {
+            Object encounterUuid = PropertyUtils.getProperty(returnValue, "encounterUuid");
+            String url = String.format(ENCOUNTER_REST_URL, encounterUuid);
+            final Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, url, CATEGORY);
 
-        atomFeedSpringTransactionManager.executeWithTransaction(
-                new AFTransactionWorkWithoutResult() {
-                    @Override
-                    protected void doInTransaction() {
-                        eventService.notify(event);
+            atomFeedSpringTransactionManager.executeWithTransaction(
+                    new AFTransactionWorkWithoutResult() {
+                        @Override
+                        protected void doInTransaction() {
+                            eventService.notify(event);
+                        }
+                        @Override
+                        public PropagationDefinition getTxPropagationDefinition() {
+                            return PropagationDefinition.PROPAGATION_REQUIRED;
+                        }
                     }
-                    @Override
-                    public PropagationDefinition getTxPropagationDefinition() {
-                        return PropagationDefinition.PROPAGATION_REQUIRED;
-                    }
-                }
-        );
+            );
+        }
     }
 
     private PlatformTransactionManager getSpringPlatformTransactionManager() {
