@@ -20,15 +20,15 @@ public class EventRecordsNumberOffsetMarkerTask extends AbstractTask {
     private int OFFSET_BY_NUMBER_OF_RECORDS_PER_CATEGORY = 1000;
     @Override
     public void execute() {
-        // TODO : Mujir/Sush - make sure the new hibernatetransactionmanager is ok..
-        AtomFeedSpringTransactionManager atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
-        AllEventRecords allEventRecords = new AllEventRecordsJdbcImpl(atomFeedSpringTransactionManager);
-        AllEventRecordsOffsetMarkers eventRecordsOffsetMarkers = new AllEventRecordsOffsetMarkersJdbcImpl(atomFeedSpringTransactionManager);
-        ChunkingEntries chunkingEntries = new ChunkingEntriesJdbcImpl(atomFeedSpringTransactionManager);
-        final OffsetMarkerService markerService = new NumberOffsetMarkerServiceImpl(allEventRecords, chunkingEntries, eventRecordsOffsetMarkers);
+        final AtomFeedSpringTransactionManager atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
+
         atomFeedSpringTransactionManager.executeWithTransaction(new AFTransactionWorkWithoutResult() {
             @Override
             protected void doInTransaction() {
+                AllEventRecords allEventRecords = new AllEventRecordsJdbcImpl(atomFeedSpringTransactionManager);
+                AllEventRecordsOffsetMarkers eventRecordsOffsetMarkers = new AllEventRecordsOffsetMarkersJdbcImpl(atomFeedSpringTransactionManager);
+                ChunkingEntries chunkingEntries = new ChunkingEntriesJdbcImpl(atomFeedSpringTransactionManager);
+                OffsetMarkerService markerService = new NumberOffsetMarkerServiceImpl(allEventRecords, chunkingEntries, eventRecordsOffsetMarkers);
                 markerService.markEvents(OFFSET_BY_NUMBER_OF_RECORDS_PER_CATEGORY);
             }
             @Override
