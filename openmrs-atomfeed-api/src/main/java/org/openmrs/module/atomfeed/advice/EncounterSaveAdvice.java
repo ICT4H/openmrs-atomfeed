@@ -20,7 +20,8 @@ import java.util.UUID;
 
 public class EncounterSaveAdvice implements AfterReturningAdvice {
 
-    public static final String ENCOUNTER_REST_URL = "/openmrs/ws/rest/v1/encounter/%s?v=custom:(uuid,encounterType,patient,visit,orders:(uuid,orderType,concept,voided))";
+    public static final String ENCOUNTER_REST_URL = getEncounterFeedUrl();
+
     public static final String TITLE = "Encounter";
     public static final String CATEGORY = "Encounter";
     private final AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
@@ -57,6 +58,10 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
                     }
             );
         }
+    }
+
+    private static String getEncounterFeedUrl() {
+        return Context.getAdministrationService().getGlobalProperty("encounter.feed.publish.url");
     }
 
     private PlatformTransactionManager getSpringPlatformTransactionManager() {

@@ -41,4 +41,18 @@
             <column name="category" type="varchar(255)"/>
         </createTable>
     </changeSet>
+    <changeSet author="Chethan, Banka" id="org.ict4h.openmrs-atomfeed-2014-06-10-14:22">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM global_property where property = 'encounter.feed.publish.url'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding global property for encounter feed publish url</comment>
+        <insert tableName="global_property">
+            <column name="property" value="encounter.feed.publish.url"/>
+            <column name="property_value" value="/openmrs/ws/rest/emrapi/encounter/%s?includeAll=true"/>
+            <column name="uuid" valueComputed="UUID()"/>
+            <column name="description" value="Url to be published on encounter save."/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
