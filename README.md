@@ -1,4 +1,4 @@
-openmrs-atomfeed-publisher
+openmrs-atomfeed
 ==========================
 
 [![Build Status](https://travis-ci.org/ICT4H/openmrs-atomfeed-publisher.png)](https://travis-ci.org/ICT4H/openmrs-atomfeed-publisher)
