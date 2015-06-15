@@ -27,7 +27,7 @@
         <url>https://github.com/ICT4H/openmrs-atomfeed</url>
         <connection>scm:git:git@github.com:ICT4H/openmrs-atomfeed.git</connection>
         <developerConnection>scm:git:git@github.com:ICT4H/openmrs-atomfeed.git</developerConnection>
-        <tag>2.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
