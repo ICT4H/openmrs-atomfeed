@@ -55,4 +55,18 @@
             <column name="description" value="Url to be published on encounter save."/>
         </insert>
     </changeSet>
+    <changeSet id="17092015053645" author="Hemanth">
+        <createTable tableName="event_records_queue">
+            <column name="id" type="serial">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="uuid" type="varchar(40)"/>
+            <column name="title" type="varchar(255)"/>
+            <column name="timestamp" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP"/>
+            <column name="uri" type="varchar(255)"/>
+            <!-- Change to CLOB -->
+            <column name="object" type="varchar(1000)"/>
+            <column name="category" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
