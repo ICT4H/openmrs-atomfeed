@@ -57,7 +57,7 @@
     </changeSet>
     <changeSet id="17092015053645" author="Hemanth">
         <createTable tableName="event_records_queue">
-            <column name="id" type="serial">
+            <column name="id" type="int">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="uuid" type="varchar(40)"/>
