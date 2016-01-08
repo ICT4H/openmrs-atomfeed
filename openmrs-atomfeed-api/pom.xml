@@ -58,7 +58,12 @@
             <version>${project.parent.version}</version>
             <type>jar</type>
         </dependency>
-
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<version>1.7.6</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	
 	<build>
