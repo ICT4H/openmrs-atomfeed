@@ -9,6 +9,7 @@ import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 import org.joda.time.DateTime;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.atomfeed.EventPublishFilterHook;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class EncounterSaveAdvice implements AfterReturningAdvice {
+
 
     public static final String ENCOUNTER_REST_URL = getEncounterFeedUrl();
 
@@ -45,20 +47,21 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
             Object encounterUuid = PropertyUtils.getProperty(returnValue, "encounterUuid");
             String url = String.format(ENCOUNTER_REST_URL, encounterUuid);
             final Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, url, CATEGORY);
+            if (EventPublishFilterHook.shouldPublish(returnValue, args, "EncounterPublishCondition.groovy")) {
+                atomFeedSpringTransactionManager.executeWithTransaction(
+                        new AFTransactionWorkWithoutResult() {
+                            @Override
+                            protected void doInTransaction() {
+                                eventService.notify(event);
+                            }
 
-            atomFeedSpringTransactionManager.executeWithTransaction(
-                    new AFTransactionWorkWithoutResult() {
-                        @Override
-                        protected void doInTransaction() {
-                            eventService.notify(event);
+                            @Override
+                            public PropagationDefinition getTxPropagationDefinition() {
+                                return PropagationDefinition.PROPAGATION_REQUIRED;
+                            }
                         }
-
-                        @Override
-                        public PropagationDefinition getTxPropagationDefinition() {
-                            return PropagationDefinition.PROPAGATION_REQUIRED;
-                        }
-                    }
-            );
+                );
+            }
         }
     }
 
