@@ -83,4 +83,17 @@
             <column name="uuid" valueComputed=" uuid() "/>
         </insert>
     </changeSet>
+
+    <changeSet id="20160119-1146" context="setup" author="Shashi, Hanisha">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="date_created" tableName="event_records"/>
+            </not>
+        </preConditions>
+        <comment>Creating column date_created for queue table. This indicates the time event was raised or created.</comment>
+        <addColumn tableName="event_records">
+            <column name="date_created" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
