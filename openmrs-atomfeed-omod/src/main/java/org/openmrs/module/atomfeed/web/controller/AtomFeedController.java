@@ -27,11 +27,9 @@ public class AtomFeedController {
     private static Logger logger = Logger.getLogger(AtomFeedController.class);
     private AtomFeedSpringTransactionManager atomTxManager;
     private EventFeedService eventFeedService;
-    private UrlUtil urlUtil;
 
     @Autowired
-    public AtomFeedController(PlatformTransactionManager transactionManager, UrlUtil urlUtil) {
-        this.urlUtil = urlUtil;
+    public AtomFeedController(PlatformTransactionManager transactionManager) {
         atomTxManager = new AtomFeedSpringTransactionManager(transactionManager);
         this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
                 new AllEventRecordsJdbcImpl(atomTxManager),
@@ -47,7 +45,7 @@ public class AtomFeedController {
     @RequestMapping(method = RequestMethod.GET, value = "/{category}/recent")
     @ResponseBody
     public String getRecentEventFeedForCategory(HttpServletRequest httpServletRequest, @PathVariable String category) {
-        return EventFeedServiceHelper.getRecentFeed(eventFeedService, urlUtil.getRequestURL(httpServletRequest),
+        return EventFeedServiceHelper.getRecentFeed(eventFeedService, new UrlUtil().getRequestURL(httpServletRequest),
                 category, logger, atomTxManager);
     }
 
@@ -55,7 +53,7 @@ public class AtomFeedController {
     @ResponseBody
     public String getEventFeedWithCategory(HttpServletRequest httpServletRequest,
                                            @PathVariable String category, @PathVariable int n) {
-        return EventFeedServiceHelper.getEventFeed(eventFeedService, urlUtil.getRequestURL(httpServletRequest),
+        return EventFeedServiceHelper.getEventFeed(eventFeedService, new UrlUtil().getRequestURL(httpServletRequest),
                 category, n, logger, atomTxManager);
     }
 }

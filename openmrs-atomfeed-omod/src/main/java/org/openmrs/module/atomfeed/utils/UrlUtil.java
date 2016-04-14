@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-@Component
 public class UrlUtil {
     private static Logger logger = Logger.getLogger(UrlUtil.class);
 
