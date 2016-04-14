@@ -9,8 +9,8 @@ import org.ict4h.atomfeed.server.service.EventFeedServiceImpl;
 import org.ict4h.atomfeed.server.service.feedgenerator.FeedGeneratorFactory;
 import org.ict4h.atomfeed.server.service.helper.EventFeedServiceHelper;
 import org.ict4h.atomfeed.server.service.helper.ResourceHelper;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
+import org.openmrs.module.atomfeed.utils.UrlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -27,9 +27,11 @@ public class AtomFeedController {
     private static Logger logger = Logger.getLogger(AtomFeedController.class);
     private AtomFeedSpringTransactionManager atomTxManager;
     private EventFeedService eventFeedService;
+    private UrlUtil urlUtil;
 
     @Autowired
-    public AtomFeedController(PlatformTransactionManager transactionManager) {
+    public AtomFeedController(PlatformTransactionManager transactionManager, UrlUtil urlUtil) {
+        this.urlUtil = urlUtil;
         atomTxManager = new AtomFeedSpringTransactionManager(transactionManager);
         this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
                 new AllEventRecordsJdbcImpl(atomTxManager),
@@ -45,7 +47,7 @@ public class AtomFeedController {
     @RequestMapping(method = RequestMethod.GET, value = "/{category}/recent")
     @ResponseBody
     public String getRecentEventFeedForCategory(HttpServletRequest httpServletRequest, @PathVariable String category) {
-        return EventFeedServiceHelper.getRecentFeed(eventFeedService, getRequestURL(httpServletRequest),
+        return EventFeedServiceHelper.getRecentFeed(eventFeedService, urlUtil.getRequestURL(httpServletRequest),
                 category, logger, atomTxManager);
     }
 
@@ -53,46 +55,7 @@ public class AtomFeedController {
     @ResponseBody
     public String getEventFeedWithCategory(HttpServletRequest httpServletRequest,
                                            @PathVariable String category, @PathVariable int n) {
-        return EventFeedServiceHelper.getEventFeed(eventFeedService, getRequestURL(httpServletRequest),
+        return EventFeedServiceHelper.getEventFeed(eventFeedService, urlUtil.getRequestURL(httpServletRequest),
                 category, n, logger, atomTxManager);
-    }
-
-    private String getRequestURL(HttpServletRequest request) {
-        String requestUrl = getServiceUriFromRequest(request);
-        if (requestUrl == null) {
-            requestUrl = getBaseUrlFromOpenMrsGlobalProperties(request);
-        }
-        return requestUrl != null ? requestUrl : request.getRequestURL().toString();
-    }
-
-    private String getBaseUrlFromOpenMrsGlobalProperties(HttpServletRequest request) {
-        String restUri = Context.getAdministrationService().getGlobalProperty("webservices.rest.uriPrefix");
-        if (restUri != null)
-            return addPathToUrl(restUri, request.getRequestURI(), request.getQueryString());
-        return null;
-    }
-
-    private String getServiceUriFromRequest(HttpServletRequest request) {
-        String scheme = request.getHeader("X-Forwarded-Proto");
-        if (scheme == null) {
-            return null;
-        }
-        String hostname = request.getServerName();
-        int port = request.getServerPort();
-        String baseUrl = null;
-        if (port != 80 && port != 443 && port != -1) {
-            baseUrl = scheme + "://" + hostname + ":" + port;
-        } else {
-            baseUrl = scheme + "://" + hostname;
-        }
-        return addPathToUrl(baseUrl, request.getRequestURI(), request.getQueryString());
-    }
-
-    private String addPathToUrl(String baseUrl, String path, String queryString) {
-        String url = baseUrl + path;
-        if (queryString != null) {
-            return url + "?" + queryString;
-        }
-        return url;
     }
 }
