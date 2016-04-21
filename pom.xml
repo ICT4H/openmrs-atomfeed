@@ -48,7 +48,7 @@
 	<properties>
 		<openMRSVersion>1.9.2</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <atomfeed.version>1.9.1</atomfeed.version>
+        <atomfeed.version>1.9.2</atomfeed.version>
 	</properties>
 
 	<dependencyManagement>
