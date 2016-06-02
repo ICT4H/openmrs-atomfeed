@@ -92,7 +92,7 @@
         </preConditions>
         <comment>Creating column date_created for queue table. This indicates the time event was raised or created.</comment>
         <addColumn tableName="event_records">
-            <column name="date_created" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP"/>
+            <column name="date_created" type="TIMESTAMP"/>
         </addColumn>
     </changeSet>
 
