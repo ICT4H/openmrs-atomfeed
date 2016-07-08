@@ -138,4 +138,28 @@
         </insert>
     </changeSet>
 
+    <changeSet id="20160705-1120" context="setup" author="angshu">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="tags" tableName="event_records_queue"/>
+            </not>
+        </preConditions>
+        <comment>Creating column tags for queue table. Each event can be tagged with multiple tags; as comma separated strings</comment>
+        <addColumn tableName="event_records_queue">
+            <column name="tags" type="varchar(255)"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20160705-1130" context="setup" author="angshu">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="tags" tableName="event_records"/>
+            </not>
+        </preConditions>
+        <comment>Creating column tags for event_records table. Each event can be tagged with multiple tags; as comma separated strings</comment>
+        <addColumn tableName="event_records">
+            <column name="tags" type="varchar(255)"></column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
