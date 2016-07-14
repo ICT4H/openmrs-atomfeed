@@ -162,4 +162,34 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20160713-1978-1" author="Pankaj/Koushik">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM global_property where property = 'atomfeed.publish.eventsForPatientProgramStateChange'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding global property to act as switch for raising program events</comment>
+        <insert tableName="global_property">
+            <column name="property" value="atomfeed.publish.eventsForPatientProgramStateChange"/>
+            <column name="property_value" value=""/>
+            <column name="uuid" valueComputed="UUID()"/>
+            <column name="description" value="If set true, events related to program changes are published"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20160713-1978-2" author="Pankaj/Koushik">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM global_property where property = 'atomfeed.event.urlPatternForProgramStateChange'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding global property to specify the URL pattern for published program events</comment>
+        <insert tableName="global_property">
+            <column name="property" value="atomfeed.event.urlPatternForProgramStateChange"/>
+            <column name="property_value" value=""/>
+            <column name="uuid" valueComputed="UUID()"/>
+            <column name="description" value="URL pattern to use for published program events. Default is /openmrs/ws/rest/v1/programenrollment/{uuid}?v=full"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
