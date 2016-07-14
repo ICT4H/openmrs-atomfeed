@@ -16,4 +16,5 @@
   		    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
   		    http://www.springframework.org/schema/util
   		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<bean id="patientProgramAdviceInterceptor" class="org.openmrs.module.atomfeed.advice.PatientProgramAdvice"/>
 </beans>

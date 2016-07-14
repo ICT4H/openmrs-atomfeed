@@ -30,6 +30,11 @@
 		<class>org.openmrs.module.atomfeed.advice.PersonRelationshipAdvice</class>
 	</advice>
 
+	<advice>
+		<point>org.openmrs.api.ProgramWorkflowService</point>
+		<class>org.openmrs.module.atomfeed.advice.PatientProgramAdvice</class>
+	</advice>
+
     <advice>
         <point>org.openmrs.module.emrapi.encounter.EmrEncounterService</point>
         <class>org.openmrs.module.atomfeed.advice.EncounterSaveAdvice</class>
