@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class PatientProgramAdvice implements AfterReturningAdvice {
-    private static final String CATEGORY = "program_enrollment";
+    private static final String CATEGORY = "programenrollment";
     private static final String TITLE = "Progam Enrollment";
     private static final String SAVE_PATIENT_PROGRAM_METHOD = "savePatientProgram";
     private static final String RAISE_PATIENT_PROGRAM_EVENT_GLOBAL_PROPERTY = "atomfeed.publish.eventsForPatientProgramStateChange";
