@@ -1,7 +1,8 @@
 package org.openmrs.module.atomfeed.transaction.support;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.transaction.AFTransactionManager;
 import org.ict4h.atomfeed.transaction.AFTransactionWork;
@@ -54,7 +55,7 @@ public class AtomFeedSpringTransactionManager implements AFTransactionManager, J
     @Override
     public Connection getConnection() throws SQLException {
         //TODO: ensure that only connection associated with current thread current transaction is given
-        return getSession().connection();
+        return ((SessionImpl)getSession()).connection();
     }
 
     private Session getSession() {

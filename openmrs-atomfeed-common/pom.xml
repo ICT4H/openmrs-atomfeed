@@ -14,8 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <openMRSVersion>1.8.4</openMRSVersion>
-        <springVersion>3.0.5.RELEASE</springVersion>
+        <springVersion>4.1.4.RELEASE</springVersion>
     </properties>
 
     <dependencies>
@@ -23,12 +22,6 @@
             <groupId>org.ict4h</groupId>
             <artifactId>atomfeed-client</artifactId>
             <version>${atomfeed.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openmrs.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>3.6.5.Final-mod</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
