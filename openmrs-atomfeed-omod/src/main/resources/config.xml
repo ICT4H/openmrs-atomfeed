@@ -15,7 +15,10 @@
 	<require_version>${openMRSVersion}</require_version>
 	<!-- / Module Properties -->
 
-	
+	<require_modules>
+		<require_module>org.openmrs.module.legacyui</require_module>
+	</require_modules>
+
 	<!-- Module Activator -->
 	<activator>org.openmrs.module.atomfeed.AtomFeedActivator</activator>
 
