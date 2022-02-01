@@ -1,6 +1,7 @@
 package org.openmrs.module.atomfeed.web.controller;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
@@ -24,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping(value = "/atomfeed")
 public class AtomFeedController {
-    private static Logger logger = Logger.getLogger(AtomFeedController.class);
+    private static Logger logger = LogManager.getLogger(AtomFeedController.class);
     private AtomFeedSpringTransactionManager atomTxManager;
     private EventFeedService eventFeedService;
 

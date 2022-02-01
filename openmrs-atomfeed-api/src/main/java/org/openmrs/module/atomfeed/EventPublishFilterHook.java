@@ -1,7 +1,8 @@
 package org.openmrs.module.atomfeed;
 
 import groovy.lang.GroovyClassLoader;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openmrs.module.atomfeed.advice.EncounterSaveAdvice;
 import org.openmrs.module.atomfeed.filter.DefaultEventPublishFilter;
 import org.openmrs.module.atomfeed.filter.EventPublishFilter;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class EventPublishFilterHook {
 
-    private static final Logger log = Logger.getLogger(EncounterSaveAdvice.class);
+    private static final Logger log = LogManager.getLogger(EncounterSaveAdvice.class);
     private static GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
     private static Map<String, EventPublishFilter> eventPublishFilterMap = new HashMap<String, EventPublishFilter>();
 

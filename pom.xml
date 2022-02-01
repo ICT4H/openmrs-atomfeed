@@ -46,9 +46,9 @@
 	</modules>
 	
 	<properties>
-		<openMRSVersion>2.1.1</openMRSVersion>
+		<openMRSVersion>2.1.5</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <atomfeed.version>1.9.3</atomfeed.version>
+        <atomfeed.version>1.10.0-SNAPSHOT</atomfeed.version>
 	</properties>
 
 	<dependencyManagement>
@@ -186,7 +186,7 @@
 		<pluginRepository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

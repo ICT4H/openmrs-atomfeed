@@ -1,16 +1,16 @@
 package org.openmrs.module.atomfeed.utils;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openmrs.api.context.Context;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class UrlUtil {
-    private static Logger logger = Logger.getLogger(UrlUtil.class);
+    private static Logger logger = LogManager.getLogger(UrlUtil.class);
 
     public String getRequestURL(HttpServletRequest request) {
         String requestUrl = getServiceUriFromRequest(request);
