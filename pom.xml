@@ -4,7 +4,7 @@
 
 	<groupId>org.ict4h.openmrs</groupId>
 	<artifactId>openmrs-atomfeed</artifactId>
-	<version>2.5.7-SNAPSHOT</version>
+	<version>2.6.0</version>
 	<packaging>pom</packaging>
 	<name>AtomFeed Module</name>
 	<description>Atomfeed publisher and consumer for OpenMRS.</description>
@@ -46,9 +46,9 @@
 	</modules>
 	
 	<properties>
-		<openMRSVersion>2.1.1</openMRSVersion>
+		<openMRSVersion>2.1.5</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <atomfeed.version>1.9.3</atomfeed.version>
+        <atomfeed.version>1.10.0</atomfeed.version>
 	</properties>
 
 	<dependencyManagement>
@@ -157,6 +157,17 @@
 		</pluginManagement>
 	</build>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>nexus-sonatype</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>nexus-sonatype</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+	</distributionManagement>
+
 	<repositories>
 		<repository>
 			<id>openmrs-repo</id>
@@ -174,7 +185,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-
         <repository>
             <id>sonatype-nexus-releases</id>
             <name>Sonatype Nexus Releases</name>
@@ -186,7 +196,7 @@
 		<pluginRepository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

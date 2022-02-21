@@ -5,7 +5,6 @@ import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
-import org.joda.time.DateTime;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
@@ -15,6 +14,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +38,7 @@ public class PatientProgramAdvice implements AfterReturningAdvice {
     public void afterReturning(Object returnValue, Method method, Object[] arguments, Object target) throws Throwable {
         if (method.getName().equals(SAVE_PATIENT_PROGRAM_METHOD) && shouldRaiseRelationshipEvent()) {
             String contents = getUrlPattern().replace("{uuid}",((PatientProgram) returnValue).getUuid());
-            final Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, contents, CATEGORY);
+            final Event event = new Event(UUID.randomUUID().toString(), TITLE, LocalDateTime.now(), (URI) null, contents, CATEGORY);
 
             getAFTxManager().executeWithTransaction(
                     new AFTransactionWorkWithoutResult() {
