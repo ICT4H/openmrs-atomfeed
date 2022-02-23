@@ -4,7 +4,7 @@
 
 	<groupId>org.ict4h.openmrs</groupId>
 	<artifactId>openmrs-atomfeed</artifactId>
-	<version>2.6.1</version>
+	<version>2.6.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>AtomFeed Module</name>
 	<description>Atomfeed publisher and consumer for OpenMRS.</description>
@@ -39,7 +39,7 @@
         </developer>
     </developers>
 
-	<modules>
+	<modules>	
 		<module>openmrs-atomfeed-api</module>
         <module>openmrs-atomfeed-omod</module>
         <module>openmrs-atomfeed-common</module>
