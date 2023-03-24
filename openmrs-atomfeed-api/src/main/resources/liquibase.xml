@@ -191,5 +191,13 @@
             <column name="description" value="URL pattern to use for published program events. Default is /openmrs/ws/rest/v1/programenrollment/{uuid}?v=full"/>
         </insert>
     </changeSet>
-
+    <changeSet id="atom-feed-console-privilege-190820221248" author="bahmni-user">
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM privilege where privilege = 'app:atomfeed-console'</sqlCheck>
+        </preConditions>
+        <comment>Add atom feed console privilege</comment>
+        <sql>
+            insert ignore into privilege(privilege, description, uuid) VALUES ('app:atomfeed-console', 'Will give access to atom feed console', UUID());
+        </sql>
+    </changeSet>
 </databaseChangeLog>
