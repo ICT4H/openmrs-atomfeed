@@ -42,6 +42,10 @@
         <point>org.openmrs.module.emrapi.encounter.EmrEncounterService</point>
         <class>org.openmrs.module.atomfeed.advice.EncounterSaveAdvice</class>
     </advice>
+	<advice>
+		<point>org.openmrs.api.EncounterService</point>
+		<class>org.openmrs.module.atomfeed.advice.EncounterServiceSaveAdvice</class>
+	</advice>
 
     <!-- Adds link to admin page -->
 	<extension>
