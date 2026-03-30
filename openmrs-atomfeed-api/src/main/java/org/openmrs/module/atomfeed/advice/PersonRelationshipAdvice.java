@@ -58,6 +58,8 @@ public class PersonRelationshipAdvice implements AfterReturningAdvice {
     }
 
     private boolean shouldRaiseRelationshipEvent() {
+        String masterSwitch = Context.getAdministrationService().getGlobalProperty("atomfeed.enable.publish");
+        if (masterSwitch != null && !masterSwitch.isEmpty() && !Boolean.parseBoolean(masterSwitch)) return false;
         String raiseEvent = Context.getAdministrationService().getGlobalProperty(RAISE_RELATIONSHIP_EVENT_GLOBAL_PROPERTY);
         return Boolean.valueOf(raiseEvent);
     }

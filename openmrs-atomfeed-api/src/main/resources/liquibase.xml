@@ -84,6 +84,22 @@
         </insert>
     </changeSet>
 
+    <changeSet id="openmrs-atomfeed-disable-auto-start-20260406" author="Lingeswaran">
+        <update tableName="scheduler_task_config">
+            <column name="start_on_startup" valueNumeric="0"/>
+            <column name="started" valueNumeric="0"/>
+            <where>schedulable_class = 'org.openmrs.module.atomfeed.scheduler.tasks.EventPublisherTask'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="openmrs-atomfeed-disable-offset-marker-auto-start-20260406" author="Lingeswaran">
+        <update tableName="scheduler_task_config">
+            <column name="start_on_startup" valueNumeric="0"/>
+            <column name="started" valueNumeric="0"/>
+            <where>schedulable_class = 'org.openmrs.module.atomfeed.scheduler.tasks.EventRecordsNumberOffsetMarkerTask'</where>
+        </update>
+    </changeSet>
+
     <changeSet id="20160119-1146" context="setup" author="Shashi, Hanisha">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -189,6 +205,22 @@
             <column name="property_value" value=""/>
             <column name="uuid" valueComputed="UUID()"/>
             <column name="description" value="URL pattern to use for published program events. Default is /openmrs/ws/rest/v1/programenrollment/{uuid}?v=full"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="atomfeed-master-publish-switch-20260327" author="Lingeswaran,aishwarya">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM global_property where property = 'atomfeed.enable.publish'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding master switch global property to enable or disable all atomfeed event publishing in atomfeed module</comment>
+        <insert tableName="global_property">
+            <column name="property" value="atomfeed.enable.publish"/>
+            <column name="property_value" value="false"/>
+            <column name="uuid" valueComputed="UUID()"/>
+            <column name="description" value="Master switch to enable or disable all atomfeed event publishing. Set to false to stop all events from being published."/>
         </insert>
     </changeSet>
 

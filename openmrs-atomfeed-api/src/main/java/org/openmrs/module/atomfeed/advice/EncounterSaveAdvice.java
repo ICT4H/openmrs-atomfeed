@@ -43,7 +43,7 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
 
     @Override
     public void afterReturning(Object returnValue, Method method, Object[] args, Object emrEncounterService) throws Throwable {
-        if (method.getName().equals(SAVE_METHOD)) {
+        if (method.getName().equals(SAVE_METHOD) && isAtomFeedPublishEnabled()) {
             Object encounterUuid = PropertyUtils.getProperty(returnValue, "encounterUuid");
             String url = String.format(ENCOUNTER_REST_URL, encounterUuid);
             final Event event = new Event(UUID.randomUUID().toString(), TITLE, LocalDateTime.now(), (URI) null, url, CATEGORY);
@@ -63,6 +63,11 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
                 );
             }
         }
+    }
+
+    private boolean isAtomFeedPublishEnabled() {
+        String value = Context.getAdministrationService().getGlobalProperty("atomfeed.enable.publish");
+        return value == null || value.isEmpty() || Boolean.parseBoolean(value);
     }
 
     private static String getEncounterFeedUrl() {
