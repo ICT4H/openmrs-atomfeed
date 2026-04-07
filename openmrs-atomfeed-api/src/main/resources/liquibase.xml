@@ -84,22 +84,6 @@
         </insert>
     </changeSet>
 
-    <changeSet id="openmrs-atomfeed-disable-auto-start-20260406" author="Lingeswaran">
-        <update tableName="scheduler_task_config">
-            <column name="start_on_startup" valueNumeric="0"/>
-            <column name="started" valueNumeric="0"/>
-            <where>schedulable_class = 'org.openmrs.module.atomfeed.scheduler.tasks.EventPublisherTask'</where>
-        </update>
-    </changeSet>
-
-    <changeSet id="openmrs-atomfeed-disable-offset-marker-auto-start-20260406" author="Lingeswaran">
-        <update tableName="scheduler_task_config">
-            <column name="start_on_startup" valueNumeric="0"/>
-            <column name="started" valueNumeric="0"/>
-            <where>schedulable_class = 'org.openmrs.module.atomfeed.scheduler.tasks.EventRecordsNumberOffsetMarkerTask'</where>
-        </update>
-    </changeSet>
-
     <changeSet id="20160119-1146" context="setup" author="Shashi, Hanisha">
         <preConditions onFail="MARK_RAN">
             <not>

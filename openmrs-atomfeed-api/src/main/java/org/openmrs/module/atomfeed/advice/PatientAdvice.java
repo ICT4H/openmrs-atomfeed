@@ -57,8 +57,7 @@ public class PatientAdvice implements AfterReturningAdvice {
     }
 
     private boolean isAtomFeedPublishEnabled() {
-        String value = Context.getAdministrationService().getGlobalProperty("atomfeed.enable.publish");
-        return value == null || value.isEmpty() || Boolean.parseBoolean(value);
+        return Boolean.parseBoolean(Context.getAdministrationService().getGlobalProperty("atomfeed.enable.publish"));
     }
 
     private PlatformTransactionManager getSpringPlatformTransactionManager() {
