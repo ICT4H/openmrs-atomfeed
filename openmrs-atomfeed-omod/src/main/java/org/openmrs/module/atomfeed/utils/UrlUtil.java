@@ -21,7 +21,9 @@ public class UrlUtil {
     }
 
     private String getBaseUrlFromOpenMrsGlobalProperties(HttpServletRequest request) {
+        Context.addProxyPrivilege(org.openmrs.util.PrivilegeConstants.GET_GLOBAL_PROPERTIES);
         String restUri = Context.getAdministrationService().getGlobalProperty("webservices.rest.uriPrefix");
+        Context.removeProxyPrivilege(org.openmrs.util.PrivilegeConstants.GET_GLOBAL_PROPERTIES);
         if (StringUtils.isNotBlank(restUri)) {
             try {
                 URI uri = new URI(restUri);
