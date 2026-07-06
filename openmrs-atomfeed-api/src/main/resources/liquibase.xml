@@ -192,4 +192,20 @@
         </insert>
     </changeSet>
 
+
+    <changeSet id="atomfeed-master-publish-switch-20260327" author="Lingeswaran,aishwarya">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM global_property where property = 'atomfeed.enable.publish'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding master switch global property to enable or disable all atomfeed event publishing in atomfeed module</comment>
+        <insert tableName="global_property">
+            <column name="property" value="atomfeed.enable.publish"/>
+            <column name="property_value" value="false"/>
+            <column name="uuid" valueComputed="UUID()"/>
+            <column name="description" value="Master switch to enable or disable all atomfeed event publishing. Set to false to stop all events from being published."/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

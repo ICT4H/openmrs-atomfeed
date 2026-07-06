@@ -43,7 +43,7 @@ public class EncounterServiceSaveAdvice implements AfterReturningAdvice {
 
     @Override
     public void afterReturning(Object returnValue, Method method, Object[] args, Object encounterService) throws Throwable {
-        if (method.getName().equals(SAVE_METHOD)) {
+        if (method.getName().equals(SAVE_METHOD) && isAtomFeedPublishEnabled()) {
             Encounter encounter = (Encounter) args[0]; // Assuming encounter is the first argument
             String encounterType = encounter.getEncounterType().getName(); // Assuming encounterType is a string
             if (ENCOUNTER_TYPE_INVESTIGATION.equals(encounterType)) {
@@ -67,6 +67,10 @@ public class EncounterServiceSaveAdvice implements AfterReturningAdvice {
                 }
             }
         }
+    }
+
+    private boolean isAtomFeedPublishEnabled() {
+        return Boolean.parseBoolean(Context.getAdministrationService().getGlobalProperty("atomfeed.enable.publish"));
     }
 
     private static String getEncounterFeedUrl() {

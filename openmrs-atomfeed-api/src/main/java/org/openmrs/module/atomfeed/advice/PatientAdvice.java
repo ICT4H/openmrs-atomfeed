@@ -36,7 +36,7 @@ public class PatientAdvice implements AfterReturningAdvice {
 
     @Override
     public void afterReturning(Object returnValue, Method method, Object[] arguments, Object target) throws Throwable {
-        if (method.getName().equals(SAVE_PATIENT_METHOD)) {
+        if (method.getName().equals(SAVE_PATIENT_METHOD) && isAtomFeedPublishEnabled()) {
             String contents = String.format(TEMPLATE, ((Patient) returnValue).getUuid());
             final Event event = new Event(UUID.randomUUID().toString(), TITLE, LocalDateTime.now(), (URI) null, contents, CATEGORY);
 
@@ -54,6 +54,10 @@ public class PatientAdvice implements AfterReturningAdvice {
             );
 
         }
+    }
+
+    private boolean isAtomFeedPublishEnabled() {
+        return Boolean.parseBoolean(Context.getAdministrationService().getGlobalProperty("atomfeed.enable.publish"));
     }
 
     private PlatformTransactionManager getSpringPlatformTransactionManager() {
