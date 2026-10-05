@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public class PatientProgramAdvice implements AfterReturningAdvice {
@@ -39,6 +38,9 @@ public class PatientProgramAdvice implements AfterReturningAdvice {
         if (method.getName().equals(SAVE_PATIENT_PROGRAM_METHOD) && shouldRaiseRelationshipEvent()) {
             String contents = getUrlPattern().replace("{uuid}",((PatientProgram) returnValue).getUuid());
             final Event event = new Event(UUID.randomUUID().toString(), TITLE, LocalDateTime.now(), (URI) null, contents, CATEGORY);
+
+            //rebind per call, the manager cached at first use goes stale after a context refresh
+            getAFTxManager().setTransactionManager(getSpringPlatformTransactionManager());
 
             getAFTxManager().executeWithTransaction(
                     new AFTransactionWorkWithoutResult() {
@@ -92,7 +94,6 @@ public class PatientProgramAdvice implements AfterReturningAdvice {
     }
 
     private PlatformTransactionManager getSpringPlatformTransactionManager() {
-        List<PlatformTransactionManager> platformTransactionManagers = Context.getRegisteredComponents(PlatformTransactionManager.class);
-        return platformTransactionManagers.get(0);
+        return Context.getRegisteredComponent("transactionManager", PlatformTransactionManager.class);
     }
 }

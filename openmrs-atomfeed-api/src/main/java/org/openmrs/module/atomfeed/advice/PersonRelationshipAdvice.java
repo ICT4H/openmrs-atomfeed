@@ -16,7 +16,6 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public class PersonRelationshipAdvice implements AfterReturningAdvice {
@@ -26,7 +25,7 @@ public class PersonRelationshipAdvice implements AfterReturningAdvice {
     private static final String RAISE_RELATIONSHIP_EVENT_GLOBAL_PROPERTY = "atomfeed.publish.eventsForPatientRelationshipChange";
     private static final String RELATIONSHIP_EVENT_URL_PATTERN_GLOBAL_PROPERTY = "atomfeed.event.urlPatternForPatientRelationshipChange";
     private static final String DEFAULT_RELATIONSHIP_URL_PATTERN = "/openmrs/ws/rest/v1/relationship/%s";
-    private final AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
+    private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
     private final EventService eventService;
 
     public PersonRelationshipAdvice() throws SQLException {
@@ -40,6 +39,9 @@ public class PersonRelationshipAdvice implements AfterReturningAdvice {
         if (method.getName().equals(SAVE_RELATIONSHIP_METHOD) && shouldRaiseRelationshipEvent()) {
             String contents = String.format(getUrlPattern(), ((Relationship) returnValue).getUuid());
             final Event event = new Event(UUID.randomUUID().toString(), TITLE, LocalDateTime.now(), (URI) null, contents, CATEGORY);
+
+            //rebind per call, the manager cached at construction goes stale after a context refresh
+            atomFeedSpringTransactionManager.setTransactionManager(getSpringPlatformTransactionManager());
 
             atomFeedSpringTransactionManager.executeWithTransaction(
                     new AFTransactionWorkWithoutResult() {
@@ -71,7 +73,6 @@ public class PersonRelationshipAdvice implements AfterReturningAdvice {
     }
 
     private PlatformTransactionManager getSpringPlatformTransactionManager() {
-        List<PlatformTransactionManager> platformTransactionManagers = Context.getRegisteredComponents(PlatformTransactionManager.class);
-        return platformTransactionManagers.get(0);
+        return Context.getRegisteredComponent("transactionManager", PlatformTransactionManager.class);
     }
 }

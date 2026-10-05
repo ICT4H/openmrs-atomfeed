@@ -30,6 +30,18 @@ public class AtomFeedSpringTransactionManager implements AFTransactionManager, J
         propagationMap.put(AFTransactionWork.PropagationDefinition.PROPAGATION_REQUIRES_NEW, TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     }
 
+    /**
+     * Rebinds the platform transaction manager to use. Callers that live for the lifetime of the
+     * module need this, because OpenMRS discards the session factory (and the transaction manager
+     * wrapping it) whenever the application context refreshes e.g. on any module start or stop,
+     * which otherwise leaves the cached reference bound to a closed session factory.
+     *
+     * @param transactionManager the current platform transaction manager
+     */
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
     @Override
     public <T> T executeWithTransaction(final AFTransactionWork<T> action) throws RuntimeException {
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);

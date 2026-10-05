@@ -17,7 +17,6 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public class EncounterSaveAdvice implements AfterReturningAdvice {
@@ -27,7 +26,7 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
 
     public static final String TITLE = "Encounter";
     public static final String CATEGORY = "Encounter";
-    private final AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
+    private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
 
     private static final String SAVE_METHOD = "save";
 
@@ -48,6 +47,9 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
             String url = String.format(ENCOUNTER_REST_URL, encounterUuid);
             final Event event = new Event(UUID.randomUUID().toString(), TITLE, LocalDateTime.now(), (URI) null, url, CATEGORY);
             if (EventPublishFilterHook.shouldPublish(returnValue, args, "EncounterPublishCondition.groovy")) {
+                //rebind per call, the manager cached at construction goes stale after a context refresh
+                atomFeedSpringTransactionManager.setTransactionManager(getSpringPlatformTransactionManager());
+
                 atomFeedSpringTransactionManager.executeWithTransaction(
                         new AFTransactionWorkWithoutResult() {
                             @Override
@@ -70,7 +72,6 @@ public class EncounterSaveAdvice implements AfterReturningAdvice {
     }
 
     private PlatformTransactionManager getSpringPlatformTransactionManager() {
-        List<PlatformTransactionManager> platformTransactionManagers = Context.getRegisteredComponents(PlatformTransactionManager.class);
-        return platformTransactionManagers.get(0);
+        return Context.getRegisteredComponent("transactionManager", PlatformTransactionManager.class);
     }
 }
