@@ -1,31 +1,29 @@
 package org.openmrs.module.atomfeed.advice;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Mockito.when;
 
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Context.class, Method.class})
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class PatientProgramAdviceTest {
 
     @Mock
@@ -37,17 +35,22 @@ public class PatientProgramAdviceTest {
     @Mock
     private AdministrationService administrationService;
 
+    private MockedStatic<Context> contextMock;
+
     private PatientProgramAdvice patientProgramAdvice;
 
     @Before
     public void setUp() throws SQLException {
-        mockStatic(Context.class);
-        List <PlatformTransactionManager> listA = new ArrayList();
-        listA.add(platformTransactionManager);
-        PowerMockito.when(Context.getRegisteredComponents(PlatformTransactionManager.class))
-                .thenReturn(listA);
-        PowerMockito.when(Context.getAdministrationService()).thenReturn(administrationService);
+        contextMock = Mockito.mockStatic(Context.class);
+        contextMock.when(() -> Context.getRegisteredComponents(PlatformTransactionManager.class))
+                .thenReturn(Collections.singletonList(platformTransactionManager));
+        contextMock.when(Context::getAdministrationService).thenReturn(administrationService);
         this.patientProgramAdvice = new PatientProgramAdvice();
+    }
+
+    @After
+    public void tearDown() {
+        contextMock.close();
     }
 
     @Test

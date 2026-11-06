@@ -1,16 +1,17 @@
 package org.openmrs.module.atomfeed.advice;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openmrs.Relationship;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.lang.reflect.Method;
@@ -20,11 +21,9 @@ import java.util.Collections;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Context.class, Method.class})
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class PersonRelationshipAdviceTest {
 
     @Mock
@@ -36,21 +35,28 @@ public class PersonRelationshipAdviceTest {
     @Mock
     private AdministrationService administrationService;
 
+    private MockedStatic<Context> contextMock;
+
     private PersonRelationshipAdvice personRelationshipAdvice;
 
     @Before
     public void setUp() throws SQLException {
-        mockStatic(Context.class);
-        PowerMockito.when(Context.getRegisteredComponents(PlatformTransactionManager.class)).thenReturn(Collections.singletonList(platformTransactionManager));
+        contextMock = Mockito.mockStatic(Context.class);
+        contextMock.when(() -> Context.getRegisteredComponents(PlatformTransactionManager.class))
+                .thenReturn(Collections.singletonList(platformTransactionManager));
 
         this.personRelationshipAdvice = new PersonRelationshipAdvice();
+    }
+
+    @After
+    public void tearDown() {
+        contextMock.close();
     }
 
     @Test
     public void shouldCheckNameOfTheMethod() throws Throwable {
         Method method = this.getClass().getMethod("abcd");
-        PowerMockito.when(Context.getRegisteredComponents(PlatformTransactionManager.class)).thenReturn(Collections.singletonList(platformTransactionManager));
-        PowerMockito.when(Context.getAdministrationService()).thenReturn(administrationService);
+        contextMock.when(Context::getAdministrationService).thenReturn(administrationService);
         when(administrationService.getGlobalProperty("atomfeed.publish.eventsForPatientRelationshipChange")).thenReturn("true");
         personRelationshipAdvice.afterReturning(returnValue, method, null, null);
 
@@ -61,9 +67,7 @@ public class PersonRelationshipAdviceTest {
     @Ignore
     public void shouldCheckForGlobalPropertyToRaiseTheEvent() throws Throwable {
         Method method = this.getClass().getMethod("saveRelationship");
-        mockStatic(Context.class);
-        PowerMockito.when(Context.getRegisteredComponents(PlatformTransactionManager.class)).thenReturn(Collections.singletonList(platformTransactionManager));
-        PowerMockito.when(Context.getAdministrationService()).thenReturn(administrationService);
+        contextMock.when(Context::getAdministrationService).thenReturn(administrationService);
         when(administrationService.getGlobalProperty("atomfeed.publish.eventsForPatientRelationshipChange")).thenReturn("true");
         when(administrationService.getGlobalProperty("atomfeed.event.urlPatternForPatientRelationshipChange")).thenReturn("/url/%s");
         when(returnValue.getUuid()).thenReturn("1289313");
