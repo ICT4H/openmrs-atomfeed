@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.ict4h.openmrs</groupId>
 		<artifactId>openmrs-atomfeed</artifactId>
-		<version>2.7.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>openmrs-atomfeed-api</artifactId>
@@ -18,6 +18,12 @@
             <groupId>org.ict4h</groupId>
             <artifactId>atomfeed-server</artifactId>
 			<version>${atomfeed.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.persistence</groupId>
+                    <artifactId>persistence-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 		<dependency>
