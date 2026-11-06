@@ -47,6 +47,7 @@
 	
 	<properties>
 		<openMRSVersion>2.8.10</openMRSVersion>
+		<legacyUiOmodVersion>2.2.0</legacyUiOmodVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <atomfeed.version>1.10.1</atomfeed.version>
 		<log4j.version>2.25.4</log4j.version>
@@ -79,7 +80,7 @@
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>legacyui-omod</artifactId>
-				<version>1.23.0</version>
+				<version>${legacyUiOmodVersion}</version>
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
